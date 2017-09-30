@@ -42,6 +42,14 @@ linked_posts(LINK_POST_ID, POST_ID)
 
 
 
+Actual commands to Create the designed tables The Tables
+--------------------------------------------------------
+
+Creating and Populating a user table.
+CREATE TABLE user (user_id int not null , user_display_name varchar(255) not null, user_creation_date datetime, user_location varchar(255), user_age int,  PRIMARY KEY (user_id) );
+INSERT INTO user (user_id, user_display_name, user_creation_date, user_location, user_age) 
+(select distinct  (owneruserid) , owneruserdisplayname, ownerusercreationdate, owneruserlocation, owneruserage from posts)
+
 
 
 
