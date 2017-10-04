@@ -230,3 +230,35 @@ DELIMITER ; /* how to handle the user inserting multiple identical marks? gives 
 
 -- Search by %word% in title
 -- Search by tag in body
+
+---------------------------- procedure searching a question (tag, title, body) N:B works fine but c and c#
+
+drop procedure if exists Searching_Questions;
+
+delimiter //
+create procedure Searching_Questions( in inpute char (200))
+begin
+declare done int default false;
+declare a char(200);
+declare cur1 cursor for (select tag_name from post_tags 
+where match(tag_name) against(inpute IN BOOLEAN MODE));
+declare continue handler for not found set done = true;
+open cur1;
+read_loop: loop
+fetch cur1 into a;
+leave read_loop;
+end loop;
+close cur1;
+
+
+select post_id,type_id,title,body, score from (select * from post_tags 
+where match(tag_name) against(a IN BOOLEAN MODE) ) as t 
+natural join post
+where match(post.title) against(+a IN BOOLEAN MODE)
+and match(post.body) against(inpute in natural language mode)
+order by post.score desc;
+
+end;//
+delimiter ;
+
+
