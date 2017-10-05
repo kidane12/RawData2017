@@ -267,3 +267,30 @@ delimiter ;
 
 -- Search by %word% in title
 -- Search by tag in body
+
+-- search by answers using a Question.
+
+
+drop procedure if exists Searching_Answers_v1;
+
+delimiter //
+create procedure searching_answers_v1( in inpute char (200))
+
+begin
+
+select * from (select post_id from (select * from (select post_id as parent_id from (select * from post_tags 
+where match(tag_name) against(inpute IN BOOLEAN MODE) ) as t 
+natural join post
+where match(post.title) against(+inpute IN BOOLEAN MODE)
+and match(post.body) against(inpute in natural language mode)
+order by post.score desc)as N  natural join answer) as S natural join post 
+group by parent_id
+having max(post.score)) as ok natural join post;
+
+end; 
+//delimiter 
+
+call searching_answers_v1('python');
+
+
+
