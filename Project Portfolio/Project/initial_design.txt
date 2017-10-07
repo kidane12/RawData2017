@@ -40,6 +40,12 @@ linked_posts(LINK_POST_ID, POST_ID)
 
 //In posts(), index questions aside from answers
 
+/// practice
+
+
+//owneruserid -> owneruserdisplayname, ownerusercreationdate, owneruserlocation, owneruserage
+
+
 
 
 
